@@ -1,0 +1,26 @@
+# Configuration sensible (mot de passe BD)
+config/database.php
+
+# Dépendances PHP (si vous utilisez Composer plus tard)
+vendor/
+
+# Logs
+*.log
+logs/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Variables d'environnement
+.env
+.env.local
+
+# XAMPP / LAMPP
+*.pid
