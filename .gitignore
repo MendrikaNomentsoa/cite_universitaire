@@ -1,4 +1,4 @@
-# Configuration sensible (mot de passe BD)
+# Configuration sensible (mot de passe BD )
 backend/config/database.php
 
 # Dépendances PHP (si vous utilisez Composer plus tard)
