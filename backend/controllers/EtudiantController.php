@@ -1,0 +1,50 @@
+<?php
+// controllers/EtudiantController.php
+
+require_once __DIR__ . '/../models/EtudiantModel.php';
+require_once __DIR__ . '/../utils/Response.php';
+
+class EtudiantController {
+    private EtudiantModel $model;
+
+    public function __construct() {
+        $this->model = new EtudiantModel();
+    }
+
+    // GET /etudiants
+    public function index(): void {
+        Response::success($this->model->findAll());
+    }
+
+    // GET /etudiants/{id}
+    public function show(int $id): void {
+        $e = $this->model->findById($id);
+        if (!$e) Response::error('Étudiant introuvable.', 404);
+        Response::success($e);
+    }
+
+    // POST /etudiants
+    public function store(): void {
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        foreach (['nomEtudiant', 'prenoms', 'anneeNaissance', 'niveau', 'sexe', 'numEcole'] as $champ) {
+            if (empty($data[$champ])) Response::error("Champ obligatoire : $champ");
+        }
+        $id = $this->model->create($data);
+        Response::success(['numEtudiant' => $id], 'Étudiant créé.');
+    }
+
+    // PUT /etudiants/{id}
+    public function update(int $id): void {
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        if (empty($data)) Response::error('Aucune donnée fournie.');
+        $this->model->update($id, $data);
+        Response::success(null, 'Étudiant modifié.');
+    }
+
+    // DELETE /etudiants/{id}
+    public function delete(int $id): void {
+        $nb = $this->model->delete($id);
+        if ($nb === 0) Response::error('Étudiant introuvable.', 404);
+        Response::success(null, 'Étudiant supprimé.');
+    }
+}
