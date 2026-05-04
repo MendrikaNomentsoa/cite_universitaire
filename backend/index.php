@@ -128,7 +128,7 @@ try {
 
 } catch (PDOException $e) {
     error_log($e->getMessage());
-    Response::error('Erreur base de données.', 500);
+    Response::error('Erreur base de données: '.$e->getMessage(), 500);
 } catch (Exception $e) {
     error_log($e->getMessage());
     Response::error('Erreur serveur : ' . $e->getMessage(), 500);
