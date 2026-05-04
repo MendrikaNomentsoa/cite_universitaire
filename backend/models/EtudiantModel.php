@@ -14,6 +14,16 @@ class EtudiantModel extends Model {
         );
     }
 
+    public function findAllExclus()
+    {
+        return $this->fetchAll(
+            "SELECT e.*, ec.nomecole
+             FROM etudiant e
+             JOIN ecole ec ON ec.numecole = e.numecole
+             WHERE e.estExclus=TRUE
+             ORDER BY e.nometudiant, e.prenoms"
+        ); 
+    }
     public function findById(int $id): array|false {
         return $this->fetchOne(
             "SELECT e.*, ec.nomecole
