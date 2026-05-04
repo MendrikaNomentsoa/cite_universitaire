@@ -14,16 +14,7 @@ class EtudiantModel extends Model {
         );
     }
 
-    public function findAllExclus()
-    {
-        return $this->fetchAll(
-            "SELECT e.*, ec.nomecole
-             FROM etudiant e
-             JOIN ecole ec ON ec.numecole = e.numecole
-             WHERE e.estExclus=TRUE
-             ORDER BY e.nometudiant, e.prenoms"
-        ); 
-    }
+
     public function findById(int $id): array|false {
         return $this->fetchOne(
             "SELECT e.*, ec.nomecole
@@ -33,7 +24,7 @@ class EtudiantModel extends Model {
             [':id' => $id]
         );
     }
-
+    
     public function create(array $data): string {
         return $this->insert(
             "INSERT INTO etudiant
@@ -96,5 +87,26 @@ class EtudiantModel extends Model {
             "DELETE FROM etudiant WHERE numetudiant = :id",
             [':id' => $id]
         );
+    }
+
+    public function findAllExclus()
+    {
+        return $this->fetchAll(
+            "SELECT e.*, ec.nomecole
+             FROM etudiant e
+             JOIN ecole ec ON ec.numecole = e.numecole
+             WHERE e.estExclus=TRUE
+             ORDER BY e.nometudiant, e.prenoms"
+        ); 
+    }
+
+    public function search($id)
+    {
+        return $this->fetchAll(
+        "SELECT e.*, ec.nomecole
+        FROM etudiant e
+        JOIN ecole ec ON ec.numecole = e.numecole
+        WHERE e.numetudiant LIKE :id OR e.numCin LIKE :id
+        ",[':id'=>$id]);
     }
 }
