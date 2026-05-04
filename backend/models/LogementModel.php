@@ -51,4 +51,12 @@ class LogementModel extends Model {
             [':id' => $id]
         );
     }
+
+    public function findAllLibre(): array {
+        return $this->fetchAll("SELECT * FROM logement WHERE placeDisponible<>0 ORDER BY numlogement");
+    }
+
+    public function findAllOccupe(): array {
+        return $this->fetchAll("SELECT * FROM logement WHERE placeDisponible=0 ORDER BY numlogement");
+    }
 }
