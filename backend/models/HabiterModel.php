@@ -5,9 +5,9 @@ require_once __DIR__ . '/Model.php';
 
 class EcoleModel extends Model {
 
-    // public function findAll(): array {
-    //     return $this->fetchAll("SELECT * FROM ecole ORDER BY nomecole");
-    // }
+    public function findAll(): array {
+        return $this->fetchAll("SELECT * FROM HABITER");
+    }
 
     // public function findById(int $id): array|false {
     //     return $this->fetchOne(
@@ -16,12 +16,12 @@ class EcoleModel extends Model {
     //     );
     // }
 
-    // public function create(array $data): string {
-    //     return $this->insert(
-    //         "INSERT INTO ecole (nomecole) VALUES (:nom) RETURNING numecole",
-    //         [':nom' => $data['nomEcole']]
-    //     );
-    // }
+    public function create(array $data): string {
+        return $this->insert(
+            "INSERT INTO HABITER(numEtudiant,numLogement,numChambre,debutInscription,debutRenouvellement) VALUES (:num,:numLogement,:numChambre,:debutInscription,:debutInscription) RETURNING numEtudiant",
+            [':nom' => $data['numEtudiant'],':numLogement'=>$data['numLogement'],'numChambre'=>$data['numChambre'],'debutInscription'=>$data['debutInscription']]
+        );
+    }
 
     // public function update(int $id, array $data): int {
     //     return $this->execute(
