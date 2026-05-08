@@ -4,12 +4,18 @@
 require_once __DIR__ . '/../models/DemandeModel.php';
 require_once __DIR__ . '/../utils/Response.php';
 require_once __DIR__. '/../models/EtudiantModel.php';
+require_once __DIR__. '/../models/EtudierModel.php';
+require_once __DIR__. '/../models/RealiserModel.php';
 class DemandeController {
     private DemandeModel $model;
     private EtudiantModel $etudiant;
+    private EtudierModel $relationEtudier;
+    private RealiserModel $relationRealiser;
     public function __construct() {
         $this->model = new DemandeModel();
         $this->etudiant=new EtudiantModel();
+        $this->relationEtudier=new EtudierModel();
+        $this->relationRealiser=new RealiserModel();
     }
 
     // GET /demandes
@@ -32,9 +38,18 @@ class DemandeController {
         foreach (['nomEtudiant', 'prenoms', 'anneeNaissance', 'niveau', 'sexe', 'numEcole'] as $champ) {
             if (empty($data[$champ])) Response::error("Champ obligatoire : $champ");
         }
-        $numEtudiant=$this->etudiant->create($data);
+        $etudiant=$this->etudiant->search($data['numCin']);
+        if(!$etudiant)
+        {
+            $numEtudiant=$this->etudiant->create($data);
+        }else if($etudiant[0]["estexclus"]){
+            Response::error("L'etudiant est déjà exclus");
+        }else{
+        $numEtudiant=$etudiant[0]["numetudiant"];
+        }
     //ajout de la relation entre l'etudiant et l'ecole
-        
+        $this->relationEtudier->create(["numEtudiant"=>$numEtudiant,"numEcole"=>$data["numEcole"]]);
+        $this->relationRealiser->create(["numEtudiant"=>$numEtudiant,"numDemande"=>$id]);
         Response::success(['numDemande' => $id,'numEtudiant'=>$numEtudiant], 'Demande créée.');
     }
 
