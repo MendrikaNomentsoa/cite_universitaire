@@ -1,7 +1,4 @@
-﻿authentification dans l'application
-
--recevoir une demande de logement
-
+﻿
 -exclure un etudiant d'un logement
 
 -consulter les informations d'un logement
