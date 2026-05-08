@@ -106,7 +106,7 @@ class EtudiantModel extends Model {
         "SELECT e.*, ec.nomecole
         FROM etudiant e
         JOIN ecole ec ON ec.numecole = e.numecole
-        WHERE e.numetudiant LIKE :id OR e.numCin LIKE :id
-        ",[':id'=>$id]);
+        WHERE  e.numCin LIKE :id",[':id'=>'%'.$id.'%']);
     }
+    // e.numEtudiant LIKE :id OR
 }
