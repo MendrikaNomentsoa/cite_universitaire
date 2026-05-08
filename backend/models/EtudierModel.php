@@ -6,7 +6,7 @@ class EtudierModel extends Model
     public function create(array $data): string {
         return $this->insert(
             "INSERT INTO ETUDIER(numEtudiant,numEcole) VALUES (:etudiant,:ecole) RETURNING numEtudiant",
-            [':etudiant'=>$data[""],':ecole'=>$data[""]]
+            [':etudiant'=>$data["numEtudiant"],':ecole'=>$data["numEcole"]]
         );
     }
 }
