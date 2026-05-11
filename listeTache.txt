@@ -1,9 +1,4 @@
 
-
--consulter la liste des etudiants exclus d'un logement
-
--permutation de 2 etudiants dans 2 logements differents
-
 -renouveler la demande de logements des etudiants chaque année
 
 -lister les chambres dans un logement
