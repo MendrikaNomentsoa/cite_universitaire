@@ -31,7 +31,14 @@ class EtudiantController {
         if (!$e) Response::error('Étudiant introuvable.', 404);
         Response::success($e);
     }
-
+    // GET /etudiants/search
+    public function search()
+    {
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        $listeEtudiant=$this->model->search($data["id"]);
+        if(!$listeEtudiant) Response::error("Etudiant introuvable");
+        Response::success($listeEtudiant,"etudiant trouvé ".$data["id"]);
+    }
     // POST /etudiants
     public function store(): void {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
