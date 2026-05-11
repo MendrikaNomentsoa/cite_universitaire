@@ -5,16 +5,26 @@ require_once __DIR__ . '/../models/DemandeModel.php';
 require_once __DIR__ . '/../utils/Response.php';
 require_once __DIR__. '/../models/EtudiantModel.php';
 require_once __DIR__. '/../models/EtudierModel.php';
+require_once __DIR__. '/../models/HabiterModel.php';
+require_once __DIR__. '/../models/ChambreModel.php';
+require_once __DIR__. '/../models/LogementModel.php';
 //require_once __DIR__. '/../models/RealiserModel.php';
 class DemandeController {
     private DemandeModel $model;
     private EtudiantModel $etudiant;
     private EtudierModel $relationEtudier;
+    private HabiterModel $relationHabiter;
+
+    private ChambreModel $chambre;
+    private LogementModel $logement;
     //private RealiserModel $relationRealiser;
     public function __construct() {
         $this->model = new DemandeModel();
         $this->etudiant=new EtudiantModel();
         $this->relationEtudier=new EtudierModel();
+        $this->relationHabiter=new HabiterModel();
+        $this->logement=new LogementModel();
+        $this->chambre=new ChambreModel();
         //$this->relationRealiser=new RealiserModel();
     }
 
@@ -57,10 +67,22 @@ class DemandeController {
     }
 
     // PUT /demandes/{id}
+    //cette methode est utilisé pour valider les demandes des etudiants
+    //data contient les numero de chambre et de logement choisi
     public function update(int $id): void {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
         if (empty($data)) Response::error('Aucune donnée fournie.');
-        $this->model->update($id, $data);
+        //cette fonctionnalité est pour la validation des demandes
+            $informationDemande=$this->model->findById($id);
+            $this->relationHabiter->create(array_merge($data,["numEtudiant"=>$informationDemande['numetudiant'],"debutInscription"=>date('Y-m-d')]));
+            //modification des places disponibles
+            $placeDisponibleLogement=--$this->logement->findById($data['numLogement'])["placedisponible"];
+            $placeDisponibleChambre=--$this->chambre->findById($data["numChambre"])["placedisponiblechambre"];
+            $this->logement->update($data['numLogement'],['placeDisponible'=>$placeDisponibleLogement]);
+            $this->chambre->update($data['numChambre'],['placeDisponibleChambre'=>$placeDisponibleChambre]);
+            $this->model->update($id,['etatDemande'=>'valide']);
+        //fin de cette fonctionnalité
+//        $this->model->update($id, $data);
         Response::success(null, 'Demande modifiée.');
     }
 

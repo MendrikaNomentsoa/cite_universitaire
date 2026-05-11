@@ -19,7 +19,7 @@ class HabiterModel extends Model {
     public function create(array $data): string {
         return $this->insert(
             "INSERT INTO HABITER(numEtudiant,numLogement,numChambre,debutInscription,debutRenouvellement) VALUES (:num,:numLogement,:numChambre,:debutInscription,:debutInscription) RETURNING numEtudiant",
-            [':nom' => $data['numEtudiant'],':numLogement'=>$data['numLogement'],'numChambre'=>$data['numChambre'],'debutInscription'=>$data['debutInscription']]
+            [':num' => $data['numEtudiant'],':numLogement'=>$data['numLogement'],'numChambre'=>$data['numChambre'],'debutInscription'=>$data['debutInscription']]
         );
     }
 

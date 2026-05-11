@@ -19,8 +19,7 @@ class DemandeModel extends Model {
         return $this->fetchOne(
             "SELECT d.*, e.nometudiant, e.prenoms, e.numetudiant
              FROM demande d
-             JOIN realiser r ON d.numdemande = r.numdemande
-             JOIN etudiant e ON r.numetudiant = e.numetudiant
+             JOIN etudiant e ON d.numetudiant = e.numetudiant
              WHERE d.numdemande = :id",
             [':id' => $id]
         );
