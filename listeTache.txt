@@ -1,9 +1,5 @@
 
 
--Triage des logements par capacité libre
-
--lister les demandes des n derniers jours
-
 -deplacer un étudiant vers un autre logement
 
 -exclusion des étudiants n’ayant pas renouvelé son hebergement
