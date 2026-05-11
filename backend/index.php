@@ -77,6 +77,7 @@ try {
                 $method === 'POST'                  => $ctrl->store(),
                 $method === 'PUT'    && $id !== null => $ctrl->update($id),
                 $method === 'DELETE' && $id !== null => $ctrl->delete($id),
+                $method === 'DELETE' && $id === null =>$ctrl->exclureNonRenouveller(),
                 $method === 'PATCH' && !isset($segments[1]) => $ctrl->permuter(),
                 $method === 'PATCH' && isset($segments[1])=>$ctrl->deplacer(),
                 default => Response::error('Route inconnue.', 404),
