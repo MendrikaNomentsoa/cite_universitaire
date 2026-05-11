@@ -55,7 +55,18 @@ class LogementController {
     public function update(int $id): void {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
         if (empty($data)) Response::error('Aucune donnée fournie.');
-        $this->model->update($id, $data);
+        $placeDispo=0;
+        $placeTotale=0;
+        if(isset($data["listeChambre"]))
+        {
+            for($i=0;$i<count($data["listeChambre"]);$i++)
+            {
+                $placeTotale+=$data["listeChambre"][$i]["placeTotalChambre"];
+                $placeDispo+=$data["listeChambre"][$i]["placeDisponibleChambre"];
+                $this->chambre->update($data["listeChambre"][$i]["numChambre"],$data["listeChambre"][$i]);
+            }
+        }
+        $this->model->update($id, ["placeDisponible"=>$placeDispo,"placeTotal"=>$placeTotale]);
         Response::success(null, 'Logement modifié.');
     }
 
