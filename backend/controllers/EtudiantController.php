@@ -43,11 +43,29 @@ class EtudiantController {
     }
 
     // PUT /etudiants/{id}
+    //pour les renouvellements d'une demande,on doit ajouter type=renouveller
     public function update(int $id): void {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
         if (empty($data)) Response::error('Aucune donnée fournie.');
+        if(isset($data["type"]))
+        {
+            $etudiant=$this->model->findById($id);
+            if($etudiant["niveau"]=="M2")
+            {
+                $this->delete($id);
+                Response::error("Les etudiants en M2 ne peuvent plus renouveller une demande");
+            }else if($etudiant["estexclus"])
+            {
+                Response::error("L'etudiant est exclus");
+            }else{
+                $this->model->update($id,$data);
+                $this->relationHabiter->update($id,["debutRenouvellement"=>date("Y-m-d")]);
+                Response::success(null,"Etudiant renouvelé avec succès");
+            }
+        }else{
         $this->model->update($id, $data);
         Response::success(null, 'Étudiant modifié.');
+        }
     }
 
 //on ne supprime pas un étudiant mais on change seulement l'etat de la colonne estExlus en vrai
@@ -69,5 +87,6 @@ class EtudiantController {
         $informationDeuxieme=$this->relationHabiter->findById($idDeuxiemeEtudiant);
         $this->relationHabiter->update($idPremierEtudiant,['numLogement'=>$informationDeuxieme["numlogement"],"numChambre"=>$informationDeuxieme['numchambre']]);
         $this->relationHabiter->update($idDeuxiemeEtudiant,['numLogement'=>$informationPremier["numlogement"],"numChambre"=>$informationPremier['numchambre']]);
+        Response::success(null,"Etudiant permuté avec succès");
     }
 }
