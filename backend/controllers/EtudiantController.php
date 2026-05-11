@@ -122,4 +122,15 @@ class EtudiantController {
         $this->relationHabiter->update($data["numEtudiant"],["numLogement"=>$data["numLogement"],"numChambre"=>$data["numChambre"]]);
         Response::success(null,"Etudiant deplacé avec succès");
     }
+//  DELETE /etudiants
+    public function exclureNonRenouveller()
+    {
+        $id=$this->relationHabiter->findRenouvellementTerminer();
+        for($i=0;$i<count($id)/2;$i++)
+        {
+            $this->relationHabiter->delete($id[$i]);
+            $this->model->update($id[$i],['estExclus'=>true]);
+        }
+        Response::success(null,"Les etudiants n'ayant pas renouvellé sa demande sont exclus");
+    }
 }
