@@ -102,7 +102,13 @@ class EtudiantController {
         $this->relationHabiter->update($idDeuxiemeEtudiant,['numLogement'=>$informationPremier["numlogement"],"numChambre"=>$informationPremier['numchambre']]);
         Response::success(null,"Etudiant permuté avec succès");
     }
-
+    //PATCH /etudiants/{id}
+    //permet de reinclure un etudiant exclus
+    public function reintegrer($id)
+    {
+        $this->model->update($id,["estExclus"=>"FALSE"]);
+        Response::success(null,"Etudiant reintegré avec succès");
+    }
     //PATCH /etudiants/deplacer
     public function deplacer()
     {
