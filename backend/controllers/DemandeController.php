@@ -29,8 +29,19 @@ class DemandeController {
     }
 
     // GET /demandes
+    
     public function index(): void {
-        Response::success($this->model->findAll());
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        if(isset($data["nbJour"]))
+        {
+            
+            $date=new DateTime();
+            $date->sub(new DateInterval('P'.$data["nbJour"]."D"));
+            
+            Response::success($this->model->listerDemandeAvantJour($date->format("Y-m-d")));
+        }else{
+            Response::success($this->model->findAll());
+        }
     }
 
     // GET /demandes/{id}

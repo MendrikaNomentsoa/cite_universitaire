@@ -64,9 +64,8 @@ class DemandeModel extends Model {
     {
         return $this->fetchAll("SELECT d.*, e.nometudiant, e.prenoms
              FROM demande d
-             JOIN realiser r ON d.numdemande = r.numdemande
-             JOIN etudiant e ON r.numetudiant = e.numetudiant
-             WHERE dateDemande<=:jour
+             JOIN etudiant e ON d.numetudiant = e.numetudiant
+             WHERE dateDemande>=:jour
              ORDER BY d.datedemande DESC",[":jour"=>$jour]);
     }
 }
