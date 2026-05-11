@@ -71,8 +71,9 @@ try {
         case 'etudiants':
             $ctrl = new EtudiantController();
             match (true) {
-                $method === 'GET'    && $id === null => $ctrl->index(),
+                $method === 'GET'    && $id === null && !isset($segments[1])=> $ctrl->index(),
                 $method === 'GET'    && $id !== null => $ctrl->show($id),
+                $method=== 'GET'    && $id === null && isset($segments[1]) =>$ctrl->search(),
                 $method === 'POST'                  => $ctrl->store(),
                 $method === 'PUT'    && $id !== null => $ctrl->update($id),
                 $method === 'DELETE' && $id !== null => $ctrl->delete($id),
