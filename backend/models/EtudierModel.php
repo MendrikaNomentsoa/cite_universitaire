@@ -9,4 +9,11 @@ class EtudierModel extends Model
             [':etudiant'=>$data["numEtudiant"],':ecole'=>$data["numEcole"]]
         );
     }
+
+    public function findById($data): array|false {
+        return $this->fetchOne(
+            "SELECT * FROM ETUDIER WHERE numecole = :id AND numEtudiant=:etudiant",
+            [':id' => $data['numEcole'],':etudiant'=>$data['numEtudiant']]
+        );
+    }
 }
