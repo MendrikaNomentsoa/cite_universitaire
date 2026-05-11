@@ -1,5 +1,4 @@
 
--renouveler la demande de logements des etudiants chaque année
 
 -lister les chambres dans un logement
 
