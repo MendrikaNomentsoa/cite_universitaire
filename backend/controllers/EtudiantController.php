@@ -3,12 +3,13 @@
 
 require_once __DIR__ . '/../models/EtudiantModel.php';
 require_once __DIR__ . '/../utils/Response.php';
-
+require_once __DIR__ . '/../models/HabiterModel.php';
 class EtudiantController {
     private EtudiantModel $model;
-
+    private HabiterModel $relationHabiter;
     public function __construct() {
         $this->model = new EtudiantModel();
+        $this->relationHabiter=new HabiterModel();
     }
 
     // GET /etudiants
@@ -41,10 +42,12 @@ class EtudiantController {
         Response::success(null, 'Étudiant modifié.');
     }
 
+//on ne supprime pas un étudiant mais on change seulement l'etat de la colonne estExlus en vrai
     // DELETE /etudiants/{id}
     public function delete(int $id): void {
-        $nb = $this->model->delete($id);
-        if ($nb === 0) Response::error('Étudiant introuvable.', 404);
-        Response::success(null, 'Étudiant supprimé.');
+        //suppression de la relation entre etudiant et habiter
+        $this->relationHabiter->delete($id);
+        $this->model->update($id,['estExclus'=>true]);
+        Response::success(null, 'Étudiant exclus avec succès.');
     }
 }

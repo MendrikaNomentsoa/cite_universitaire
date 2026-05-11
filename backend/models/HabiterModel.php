@@ -3,7 +3,7 @@
 
 require_once __DIR__ . '/Model.php';
 
-class EcoleModel extends Model {
+class HabiterModel extends Model {
 
     public function findAll(): array {
         return $this->fetchAll("SELECT * FROM HABITER");
