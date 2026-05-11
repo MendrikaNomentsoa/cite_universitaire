@@ -3,12 +3,13 @@
 
 require_once __DIR__ . '/../models/ChambreModel.php';
 require_once __DIR__ . '/../utils/Response.php';
-
+require_once __DIR__ . '/../models/LogementModel.php';
 class ChambreController {
     private ChambreModel $model;
-
+    private LogementModel $logement;
     public function __construct() {
         $this->model = new ChambreModel();
+        $this->logement=new LogementModel();
     }
 
     // GET /chambres
@@ -35,6 +36,13 @@ class ChambreController {
             if (empty($data[$champ])) Response::error("Champ obligatoire : $champ");
         }
         $id = $this->model->create($data);
+        if(isset($data["placeTotalChambre"]))
+        {
+            $infoLogement=$this->logement->findById($data["numLogement"]);
+            $placeTotalLogement=$infoLogement["placetotal"];
+            $placeDisponible=$infoLogement["placedisponible"];
+            $this->logement->update($data["numLogement"],["placeTotal"=>$placeTotalLogement+$data["placeTotalChambre"],"placeDisponible"=>$placeDisponible+$data["placeTotalChambre"]]);
+        }
         Response::success(['numChambre' => $id], 'Chambre créée.');
     }
 
