@@ -58,4 +58,16 @@ class EtudiantController {
         $this->model->update($id,['estExclus'=>true]);
         Response::success(null, 'Étudiant exclus avec succès.');
     }
+
+    // PATCH /etudiants
+    public function permuter()
+    {
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        $idPremierEtudiant=$data["idPremier"];
+        $idDeuxiemeEtudiant=$data["idDeuxieme"];
+        $informationPremier=$this->relationHabiter->findById($idPremierEtudiant);
+        $informationDeuxieme=$this->relationHabiter->findById($idDeuxiemeEtudiant);
+        $this->relationHabiter->update($idPremierEtudiant,['numLogement'=>$informationDeuxieme["numlogement"],"numChambre"=>$informationDeuxieme['numchambre']]);
+        $this->relationHabiter->update($idDeuxiemeEtudiant,['numLogement'=>$informationPremier["numlogement"],"numChambre"=>$informationPremier['numchambre']]);
+    }
 }
