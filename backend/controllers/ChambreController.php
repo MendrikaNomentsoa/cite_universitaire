@@ -56,8 +56,19 @@ class ChambreController {
 
     // DELETE /chambres/{id}
     public function delete(int $id): void {
-        $nb = $this->model->delete($id);
-        if ($nb === 0) Response::error('Chambre introuvable.', 404);
+        $infoChambre=$this->model->findById($id);
+        if($infoChambre["placedisponiblechambre"]==$infoChambre["placetotalchambre"])
+        {
+            $placeDispoLogement=$this->logement->findById($infoChambre["numlogement"])["placedisponible"];
+            $placeTotalLogement=$this->logement->findById($infoChambre["numlogement"])["placetotal"];
+            $this->logement->update($infoChambre["numlogement"],["placeDisponible"=>$placeDispoLogement-$infoChambre["placedisponiblechambre"],"placeTotal"=>$placeTotalLogement-$infoChambre["placetotalchambre"]]);
+            $this->model->update($id,["etatChambre"=>"inactif"]);
+        }else
+        {
+            Response::error("Il y a encore des etudiants dans cette chambre");
+        }
+//        $nb = $this->model->delete($id);
+  //      if ($nb === 0) Response::error('Chambre introuvable.', 404);
         Response::success(null, 'Chambre supprimée.');
     }
 }
