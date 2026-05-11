@@ -1,11 +1,5 @@
 
 
--modifier les informations d’un étudiant
-
-- modification des informations d’un logement
-
--ajouter un nouveau logement
-
 -supprimer un logement
 
 -reintegrer un étudiant exclus
