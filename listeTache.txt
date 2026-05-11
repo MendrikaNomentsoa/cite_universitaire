@@ -1,9 +1,5 @@
 
 
--consulter les informations des etudiants dans un logement
-
--valider une demande de logement
-
 -consulter la liste des etudiants exclus d'un logement
 
 -permutation de 2 etudiants dans 2 logements differents
