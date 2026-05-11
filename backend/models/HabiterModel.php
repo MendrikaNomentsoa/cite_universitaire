@@ -16,6 +16,10 @@ class HabiterModel extends Model {
         );
     }
 
+    public function findRenouvellementTerminer()
+    {
+        return $this->fetchAll("SELECT numEtudiant FROM HABITER WHERE debutRenouvellement + INTERVAL '1 year' < :d",[":d"=>date('Y-m-d')]);
+    }
     public function create(array $data): string {
         return $this->insert(
             "INSERT INTO HABITER(numEtudiant,numLogement,numChambre,debutInscription,debutRenouvellement) VALUES (:num,:numLogement,:numChambre,:debutInscription,:debutInscription) RETURNING numEtudiant",
