@@ -12,8 +12,18 @@ class LogementController {
     }
 
     // GET /logements
+    //si type existe,alors, on trie les logements selon les capacités
     public function index(): void {
-        Response::success($this->model->findAll());
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        if(empty($data))
+        {
+            Response::success($this->model->findAll());
+        }else if($data["type"]==="libre")
+        {
+            Response::success($this->model->findAllLibre());
+        }else{
+            Response::success($this->model->findAllOccupe());
+        }
     }
 
     // GET /logements/{id}
