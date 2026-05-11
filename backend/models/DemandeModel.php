@@ -28,7 +28,7 @@ class DemandeModel extends Model {
 
     public function create(array $data): string {
         return $this->insert(
-            "INSERT INTO demande (datedemande, etatdemande,numEtudiant)
+            "INSERT INTO demande (datedemande, etatdemande,numetudiant)
              VALUES (:date, :etat,:etudiant)
              RETURNING numdemande",
             [
