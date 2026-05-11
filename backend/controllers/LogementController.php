@@ -61,8 +61,16 @@ class LogementController {
 
     // DELETE /logements/{id}
     public function delete(int $id): void {
-        $nb = $this->model->delete($id);
-        if ($nb === 0) Response::error('Logement introuvable.', 404);
+        $logement=$this->model->findById($id);
+        if($logement["placedisponible"]==$logement["placetotal"])
+        {
+            $this->model->update($id,['etatLogement'=>'HS']);
+            $this->chambre->deleteChambreLogement($id);
+        }else{
+            Response::error("On ne peut pas encore mettre ce batiment en hors service car il y a encore des etudiants qui y habitent, veuiller les exclure d'abord");
+        }
+        /*$nb = $this->model->delete($id);
+        if ($nb === 0) Response::error('Logement introuvable.', 404);*/
         Response::success(null, 'Logement supprimé.');
     }
 }

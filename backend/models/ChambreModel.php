@@ -60,4 +60,11 @@ class ChambreModel extends Model {
             [':id' => $id]
         );
     }
+
+    public function deleteChambreLogement($id)
+    {
+        return $this->execute(
+            "UPDATE chambre SET etatChambre='hs' WHERE numlogement = :id",[":id"=>$id]
+        );
+    }
 }

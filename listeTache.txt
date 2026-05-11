@@ -1,7 +1,4 @@
 
-
--supprimer un logement
-
 -reintegrer un étudiant exclus
 
 -ajout d’un nouveau chambre
