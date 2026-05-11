@@ -1,7 +1,4 @@
-﻿
--exclure un etudiant d'un logement
 
--consulter les informations d'un logement
 
 -consulter les informations des etudiants dans un logement
 
