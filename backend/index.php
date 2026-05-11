@@ -76,6 +76,7 @@ try {
                 $method === 'POST'                  => $ctrl->store(),
                 $method === 'PUT'    && $id !== null => $ctrl->update($id),
                 $method === 'DELETE' && $id !== null => $ctrl->delete($id),
+                $method === 'PATCH'                  => $ctrl->permuter(),
                 default => Response::error('Route inconnue.', 404),
             };
             break;
