@@ -3,12 +3,13 @@
 
 require_once __DIR__ . '/../models/LogementModel.php';
 require_once __DIR__ . '/../utils/Response.php';
-
+require_once __DIR__ . '/../models/ChambreModel.php';
 class LogementController {
     private LogementModel $model;
-
+    private ChambreModel $chambre;
     public function __construct() {
         $this->model = new LogementModel();
+        $this->chambre=new ChambreModel();
     }
 
     // GET /logements
@@ -37,6 +38,16 @@ class LogementController {
     public function store(): void {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
         $id = $this->model->create($data);
+        $placeTotale=0;
+        if(isset($data["listeChambre"]))
+        {
+            for($i=0;$i<count($data["listeChambre"]);$i++)
+            {
+                $placeTotale+=$data["listeChambre"][$i];
+                $this->chambre->create(["placeTotalChambre"=>$data["listeChambre"][$i],"numLogement"=>$id]);
+            }
+            $this->model->update($id,["placeDisponible"=>$placeTotale,"placeTotal"=>$placeTotale]);
+        }
         Response::success(['numLogement' => $id], 'Logement créé.');
     }
 
