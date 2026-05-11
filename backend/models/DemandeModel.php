@@ -28,12 +28,13 @@ class DemandeModel extends Model {
 
     public function create(array $data): string {
         return $this->insert(
-            "INSERT INTO demande (datedemande, etatdemande)
-             VALUES (:date, :etat)
+            "INSERT INTO demande (datedemande, etatdemande,numEtudiant)
+             VALUES (:date, :etat,:etudiant)
              RETURNING numdemande",
             [
                 ':date' => $data['dateDemande'] ?? date('Y-m-d'),
                 ':etat' => $data['etatDemande'] ?? 'attente',
+                ':etudiant'=>$data['numEtudiant']
             ]
         );
     }
@@ -44,7 +45,7 @@ class DemandeModel extends Model {
 
         if (isset($data['dateDemande'])) { $fields[] = 'datedemande = :date'; $params[':date'] = $data['dateDemande']; }
         if (isset($data['etatDemande'])) { $fields[] = 'etatdemande = :etat'; $params[':etat'] = $data['etatDemande']; }
-
+        if(isset($data['numEtudiant'])){$fields[]='numEtudiant = :etudiant';$params[':etudiant']=$data['numEtudiant'];}
         if (empty($fields)) return 0;
 
         return $this->execute(
