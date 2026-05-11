@@ -1,9 +1,5 @@
 
 
-
-
--lister les logements libres/occupé
-
 -Triage des logements par capacité libre
 
 -lister les demandes des n derniers jours
