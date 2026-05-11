@@ -4,12 +4,18 @@
 require_once __DIR__ . '/../models/EtudiantModel.php';
 require_once __DIR__ . '/../utils/Response.php';
 require_once __DIR__ . '/../models/HabiterModel.php';
+require_once __DIR__ . '/../models/LogementModel.php';
+require_once __DIR__ . '/../models/ChambreModel.php';
 class EtudiantController {
     private EtudiantModel $model;
     private HabiterModel $relationHabiter;
+    private ChambreModel $chambre;
+    private LogementModel $logement;
     public function __construct() {
         $this->model = new EtudiantModel();
         $this->relationHabiter=new HabiterModel();
+        $this->chambre=new ChambreModel();
+        $this->logement=new LogementModel();
     }
 
     // GET /etudiants
@@ -95,5 +101,25 @@ class EtudiantController {
         $this->relationHabiter->update($idPremierEtudiant,['numLogement'=>$informationDeuxieme["numlogement"],"numChambre"=>$informationDeuxieme['numchambre']]);
         $this->relationHabiter->update($idDeuxiemeEtudiant,['numLogement'=>$informationPremier["numlogement"],"numChambre"=>$informationPremier['numchambre']]);
         Response::success(null,"Etudiant permuté avec succès");
+    }
+
+    //PATCH /etudiants/deplacer
+    public function deplacer()
+    {
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        $ancienLogement=$this->relationHabiter->findById($data["numEtudiant"]);
+        $placeAncienLogement=++$this->logement->findById($ancienLogement["numlogement"])["placedisponible"];
+        $placeAncienChambre=++$this->chambre->findById($ancienLogement["numchambre"])["placedisponiblechambre"];
+        
+        $placeNouveauLogement=--$this->logement->findById($data["numLogement"])["placedisponible"];
+        $placeNouveauChambre=--$this->chambre->findById($data["numChambre"])["placedisponiblechambre"];
+        //Response::success([$placeNouveauChambre,$placeNouveauLogement]);
+        //modifier le nombre de place pour les chambres et logement (ancien et nouveau)
+        $this->logement->update($ancienLogement["numlogement"],["placeDisponible"=>$placeAncienLogement]);
+        $this->chambre->update($ancienLogement["numchambre"],["placeDisponibleChambre"=>$placeAncienChambre]);
+        $this->logement->update($data["numLogement"],["placeDisponible"=>$placeNouveauLogement]);
+        $this->chambre->update($data["numChambre"],["placeDisponibleChambre"=>$placeNouveauChambre]);
+        $this->relationHabiter->update($data["numEtudiant"],["numLogement"=>$data["numLogement"],"numChambre"=>$data["numChambre"]]);
+        Response::success(null,"Etudiant deplacé avec succès");
     }
 }
