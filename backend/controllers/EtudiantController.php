@@ -13,8 +13,16 @@ class EtudiantController {
     }
 
     // GET /etudiants
+    //si il y a des parametre avec le get,on liste les etudiants exclus
     public function index(): void {
-        Response::success($this->model->findAll());
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        if(empty($data))
+        {
+            Response::success($this->model->findAll());
+        }else{
+            Response::success($this->model->findAllExclus());
+        }
+
     }
 
     // GET /etudiants/{id}
